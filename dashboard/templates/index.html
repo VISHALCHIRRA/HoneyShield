@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HoneyShield SOC Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            color: #172033;
+        }
+
+        .header {
+            background: #ffffff;
+            padding: 20px 30px;
+            border-bottom: 1px solid #d7dee8;
+        }
+
+        .header h1 {
+            font-size: 28px;
+        }
+
+        .header p {
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        .container {
+            padding: 30px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 22px;
+            border-radius: 10px;
+            border: 1px solid #d7dee8;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+        }
+
+        .card h3 {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .card .number {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .section {
+            background: #ffffff;
+            border: 1px solid #d7dee8;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 1150px;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+
+        th {
+            color: #475569;
+            font-size: 13px;
+            background: #f8fafc;
+        }
+
+        td {
+            color: #334155;
+            font-size: 13px;
+        }
+
+        .high {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .medium {
+            color: #d97706;
+            font-weight: bold;
+        }
+
+        .status {
+            margin-bottom: 25px;
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .mitre-id {
+            font-weight: bold;
+            color: #4338ca;
+        }
+
+        .mitre-technique {
+            color: #475569;
+            margin-top: 3px;
+        }
+
+        .ti-status {
+            font-weight: bold;
+            color: #0369a1;
+        }
+
+        .ti-details {
+            margin-top: 4px;
+            color: #64748b;
+        }
+
+        .description {
+            max-width: 280px;
+        }
+
+        @media (max-width: 900px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>🛡️ HoneyShield SOC</h1>
+        <p>Intelligent Honeypot System for Cyberattack Analysis</p>
+    </div>
+
+    <div class="container">
+
+        <div class="status">
+            ● HoneyShield Monitoring Active
+        </div>
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>TOTAL ATTACK EVENTS</h3>
+                <div class="number" id="total-attacks">-</div>
+            </div>
+
+            <div class="card">
+                <h3>UNIQUE IPs</h3>
+                <div class="number" id="unique-ips">-</div>
+            </div>
+
+            <div class="card">
+                <h3>LOGIN ATTEMPTS</h3>
+                <div class="number" id="login-attempts">-</div>
+            </div>
+
+            <div class="card">
+                <h3>SUSPICIOUS COMMANDS</h3>
+                <div class="number" id="suspicious-commands">-</div>
+            </div>
+
+        </div>
+
+        <div class="section">
+
+            <h2>Recent Security Alerts</h2>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>TIME</th>
+                            <th>TYPE</th>
+                            <th>CATEGORY</th>
+                            <th>SEVERITY</th>
+                            <th>SOURCE IP</th>
+                            <th>MITRE ATT&CK</th>
+                            <th>THREAT INTELLIGENCE</th>
+                            <th>DESCRIPTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="alerts-table">
+                        <tr>
+                            <td colspan="8">Loading alerts...</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+    async function loadStats() {
+        try {
+            const response = await fetch("/api/stats");
+            const data = await response.json();
+
+            document.getElementById("total-attacks").innerText =
+                data.total_attacks;
+
+            document.getElementById("unique-ips").innerText =
+                data.unique_ips;
+
+            document.getElementById("login-attempts").innerText =
+                data.login_attempts;
+
+            document.getElementById("suspicious-commands").innerText =
+                data.suspicious_commands;
+
+        } catch (error) {
+            console.error("Stats error:", error);
+        }
+    }
+
+
+    async function loadAlerts() {
+        try {
+            const response = await fetch("/api/alerts");
+            const alerts = await response.json();
+
+            const table = document.getElementById("alerts-table");
+
+            table.innerHTML = "";
+
+            if (alerts.length === 0) {
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="8">No security alerts found.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            alerts.forEach(alert => {
+
+                const row = document.createElement("tr");
+
+                const severityClass =
+                    alert.severity
+                        ? alert.severity.toLowerCase()
+                        : "";
+
+                const mitreId =
+                    alert.mitre_id || "Not mapped";
+
+                const mitreTechnique =
+                    alert.mitre_technique || "";
+
+                const tiStatus =
+                    alert.ti_status || "No TI data";
+
+                let tiDetails = "";
+
+                if (alert.reputation) {
+                    tiDetails += `Reputation: ${alert.reputation}<br>`;
+                }
+
+                if (alert.risk_score !== null &&
+                    alert.risk_score !== undefined) {
+                    tiDetails += `Risk Score: ${alert.risk_score}<br>`;
+                }
+
+                if (alert.country) {
+                    tiDetails += `Country: ${alert.country}<br>`;
+                }
+
+                if (alert.isp) {
+                    tiDetails += `ISP: ${alert.isp}<br>`;
+                }
+
+                if (alert.abuse_reports !== null &&
+                    alert.abuse_reports !== undefined) {
+                    tiDetails += `Reports: ${alert.abuse_reports}`;
+                }
+
+                row.innerHTML = `
+                    <td>${alert.timestamp || "-"}</td>
+
+                    <td>${alert.alert_type || "-"}</td>
+
+                    <td>${alert.attack_category || "-"}</td>
+
+                    <td class="${severityClass}">
+                        ${alert.severity || "-"}
+                    </td>
+
+                    <td>${alert.src_ip || "-"}</td>
+
+                    <td>
+                        <div class="mitre-id">
+                            ${mitreId}
+                        </div>
+                        <div class="mitre-technique">
+                            ${mitreTechnique}
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="ti-status">
+                            ${tiStatus}
+                        </div>
+                        <div class="ti-details">
+                            ${tiDetails}
+                        </div>
+                    </td>
+
+                    <td class="description">
+                        ${alert.description || "-"}
+                    </td>
+                `;
+
+                table.appendChild(row);
+            });
+
+        } catch (error) {
+            console.error("Alerts error:", error);
+        }
+    }
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        loadStats();
+        loadAlerts();
+
+        // Refresh dashboard every 10 seconds
+        setInterval(function() {
+            loadStats();
+            loadAlerts();
+        }, 10000);
+    });
+
+    </script>
+
+</body>
+</html>
