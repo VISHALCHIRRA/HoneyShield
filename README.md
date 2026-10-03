@@ -163,3 +163,36 @@ The system has been tested with:
 HoneyShield is designed for authorized cybersecurity testing in an isolated laboratory environment.
 
 Do not use the honeypot or attack-testing workflow against systems without authorization.
+
+
+## Project Workflow
+
+HoneyShield follows this processing pipeline:
+
+```text
+Kali Linux → SSH Activity → Ubuntu + Cowrie → JSON Logs → Log Parser → Detection Engine → Attack Classification → MITRE ATT&CK + Threat Intelligence → SQLite → Flask API → SOC Dashboard
+```
+
+### Detection
+
+The current implementation uses explainable rule-based detection for SSH login activity, suspicious commands, and possible brute-force behavior.
+
+### Security Analysis
+
+Detected activity is classified into categories such as Authentication, Reconnaissance, Credential/File Discovery, and Command Execution. Observed behaviors are mapped to relevant MITRE ATT&CK techniques.
+
+### Threat Intelligence
+
+Public source IP addresses can be enriched using AbuseIPDB. Private laboratory IP addresses are identified as lab traffic.
+
+### Current Limitations
+
+The current version uses predefined detection rules, batch-oriented processing, a fixed brute-force threshold, and project-level SOC visualization. Machine learning is not part of the current implementation.
+
+### Future Enhancements
+
+Real-time log processing, session-based analysis, advanced risk scoring, additional threat-intelligence sources, historical correlation, and richer SOC analytics can be added in future versions.
+
+### Safety
+
+HoneyShield is intended only for authorized cybersecurity testing in an isolated laboratory environment.
