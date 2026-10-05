@@ -8,6 +8,36 @@ HoneyShield is a honeypot-based cybersecurity monitoring system designed to capt
 <p align="center">
   <img src="assets/honeyshield-dashboard.png" alt="HoneyShield SOC Dashboard" width="900">
 </p>
+## Results & Validation
+
+HoneyShield was validated in a controlled cybersecurity laboratory using Kali Linux as the attacker/test machine and Ubuntu Linux with Cowrie as the honeypot.
+
+### Validation Summary
+
+| Test | Expected Behavior | Result |
+|---|---|---|
+| Successful SSH login | Successful login alert | Detected |
+| Failed SSH login | Authentication alert | Detected |
+| 3+ failed logins | Possible brute-force alert | Detected |
+| `whoami` | Reconnaissance + MITRE mapping | Detected |
+| `uname -a` | System information discovery | Detected |
+| `ip addr` | Network configuration discovery | Detected |
+| `cat /etc/passwd` | Account discovery | Detected |
+| `wget` / `curl` | Tool transfer behavior | Detected |
+| MITRE ATT&CK mapping | Technique identification | Implemented |
+| Threat Intelligence | Public IP enrichment | Supported |
+| SQLite storage | Event and alert persistence | Verified |
+| Flask API | Alert/statistics access | Verified |
+| SOC Dashboard | Security event visualization | Verified |
+
+### Pipeline Result
+
+A completed HoneyShield processing run produced:
+
+**57 events processed → 18 alerts generated**
+
+The generated alerts included authentication activity, suspicious commands, attack classification, MITRE ATT&CK mappings, and threat-intelligence status.
+
 ## Architecture
 
 <p align="center">
