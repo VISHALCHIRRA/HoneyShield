@@ -38,7 +38,41 @@ A completed HoneyShield processing run produced:
 
 The generated alerts included authentication activity, suspicious commands, attack classification, MITRE ATT&CK mappings, and threat-intelligence status.
 
-## Architecture
+
+## Attack → Detection Demo
+
+HoneyShield was tested using a controlled SSH attack workflow from Kali Linux against the Cowrie honeypot running on Ubuntu.
+
+<p align="center">
+  <img src="assets/honeyshield-attack-demo.png" alt="HoneyShield Attack Demonstration" width="900">
+</p>
+
+### Attack Flow
+
+```text
+Kali Linux
+    ↓
+SSH Activity
+    ↓
+Cowrie Honeypot
+    ↓
+Cowrie JSON Logs
+    ↓
+HoneyShield Parser
+    ↓
+Detection Engine
+    ↓
+Attack Classification
+    ↓
+MITRE ATT&CK Mapping
+    ↓
+Threat Intelligence
+    ↓
+SQLite
+    ↓
+Flask API
+    ↓
+SOC Dashboard## Architecture
 
 <p align="center">
   <img src="assets/honeyshield-architecture.png" alt="HoneyShield Architecture" width="900">
