@@ -3,6 +3,11 @@
 
 HoneyShield is a honeypot-based cybersecurity monitoring system designed to capture, analyze and visualize controlled SSH attack activity in an isolated laboratory environment.
 
+## Dashboard Preview
+
+<p align="center">
+  <img src="assets/honeyshield-dashboard.png" alt="HoneyShield SOC Dashboard" width="900">
+</p>
 ## Architecture
 
 <p align="center">
