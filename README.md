@@ -5,27 +5,9 @@ HoneyShield is a honeypot-based cybersecurity monitoring system designed to capt
 
 ## Architecture
 
-Kali Linux
-    ↓
-Ubuntu + Cowrie Honeypot
-    ↓
-Cowrie JSON Logs
-    ↓
-HoneyShield Log Parser
-    ↓
-Detection Engine
-    ├── Login Detection
-    ├── Suspicious Command Detection
-    ├── Attack Classification
-    ├── Brute-force Detection
-    ├── MITRE ATT&CK Mapping
-    └── Threat Intelligence
-    ↓
-SQLite Database
-    ↓
-Flask API
-    ↓
-SOC Dashboard
+<p align="center">
+  <img src="assets/honeyshield-architecture.png" alt="HoneyShield Architecture" width="900">
+</p>
 
 ## Main Features
 
@@ -58,6 +40,7 @@ SOC Dashboard
 
 ## Project Structure
 
+```text
 HoneyShield/
 ├── backend/
 │   ├── app.py
@@ -67,7 +50,6 @@ HoneyShield/
 │   └── templates/
 │       └── index.html
 ├── database/
-│   ├── honeyshield.db
 │   └── schema.sql
 ├── detection/
 │   ├── detector.py
@@ -75,15 +57,17 @@ HoneyShield/
 │   └── threat_intelligence.py
 ├── parser/
 │   └── log_parser.py
-├── logs/
-│   ├── cowrie.json
-│   ├── processed_logs.json
-│   └── alerts.json
-├── .env
+├── assets/
+│   └── honeyshield-architecture.png
+├── .env.example
 ├── .gitignore
+├── README.md
 ├── requirements.txt
-├── run.py
-└── README.md
+└── run.py
+```
+
+> Runtime databases, raw logs, virtual environments, Python cache files, and .env secrets are intentionally excluded from version control.
+
 
 ## Running HoneyShield
 
