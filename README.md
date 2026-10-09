@@ -72,11 +72,11 @@ SQLite
     ↓
 Flask API
     ↓
-SOC Dashboard## Architecture
+SOC Dashboard
 
-<p align="center">
-  <img src="assets/honeyshield-architecture.png" alt="HoneyShield Architecture" width="900">
-</p>
+## Architecture
+
+![HoneyShield Architecture](./assets/honeyshield-architecture.png)
 
 ## Main Features
 
