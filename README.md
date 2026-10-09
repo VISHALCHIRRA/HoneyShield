@@ -73,6 +73,7 @@ SQLite
 Flask API
     ↓
 SOC Dashboard
+```
 
 ## Architecture
 
